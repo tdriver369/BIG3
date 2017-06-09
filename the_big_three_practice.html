@@ -1,0 +1,551 @@
+<html>
+	<head>
+		<title>TH3 BIG THR33</title>
+	</head>
+<body>
+
+	<h1>TH3 BIG THR33</h1>
+	<h2>Level: </h2><h2 id="xlevel"></h2>
+	<hr>
+
+	<h1>Enter Set:</h1>
+	Exercise:<select id="exercises">
+		<option >Bench Press</option>
+		<option >Deadlift</option>
+		<option >Squat</option>
+	</select><br>
+	Weight: <input id="weight" type="text" value="100"><br>
+	Reps: <input id="reps" type="text" value="10"><br>
+	<button onclick="addSet();addStats();addRecord();">Add</button>
+	<p id="response"></p>
+	<p id="response2"></p>
+	<p id="response3"></p>
+	<hr>
+
+	<h1>History:</h1>
+	<button onclick="clearResults();xhistory.forEach(showAll);showSets()">Show All</button>
+	<button onclick="clearResults();xhistory.forEach(showBenchSets);showSets()">Bench</button>
+	<button onclick="clearResults();xhistory.forEach(showDeadSets);showSets()">Deadlift</button>
+	<button onclick="clearResults();xhistory.forEach(showSquatSets);showSets()">Squat</button>
+	<button onclick="hideSets()">Hide</button>
+	<p id="history"></p>
+	<hr>
+
+	<h1>Stats</h1>
+	<button onclick="showTotal();">Total</button>
+	<button onclick="showBench();">Bench</button>
+	<button onclick="showDead();">Deadlift</button>
+	<button onclick="showSquat();">Squat</button><br>
+	Gains: <p id="xgains"></p>
+	Weight: <p id="xweight"></p>
+	Reps: <p id="xreps"></p>
+	Sets: <p id="xsets"></p>
+	<hr>
+
+	<h1>Records</h1>
+	<button onclick="pickBench();">Bench</button>
+	<button onclick="pickSquat();">Deadlift</button>
+	<button onclick="pickDead();">Squat</button>
+	<p>(Click to Refresh)<p>
+	<h2>Stacks</h2>
+	<table>
+		<tr>
+			<th>Reps</th>
+			<th>Weight</th>
+			<th>Records</th>
+		</tr>
+		<tr>
+			<td>1</td>
+			<td id="s1"></td>
+			<td id="r1"></td>
+		</tr>
+		<tr>
+			<td>2</td>
+			<td id="s2"></td>
+			<td id="r2"></td>
+		</tr>
+		<tr>
+			<td>3</td>
+			<td id="s3"></td>
+			<td id="r3"></td>
+		</tr>
+		<tr>
+			<td>4</td>
+			<td id="s4"></td>
+			<td id="r4"></td>
+		</tr>
+		<tr>
+			<td>5</td>
+			<td id="s5"></td>
+			<td id="r5"></td>
+		</tr>
+		<tr>
+			<td>6</td>
+			<td id="s6"></td>
+			<td id="r6"></td>
+		</tr>
+		<tr>
+			<td>7</td>
+			<td id="s7"></td>
+			<td id="r7"></td>
+		</tr>
+		<tr>
+			<td>8</td>
+			<td id="s8"></td>
+			<td id="r8"></td>
+		</tr>
+		<tr>
+			<td>9</td>
+			<td id="s9"></td>
+			<td id="r9"></td>
+		</tr>
+		<tr>
+			<td>10</td>
+			<td id="s10"></td>
+			<td id="r10"></td>
+		</tr>
+		<tr>
+			<td>11</td>
+			<td id="s11"></td>
+			<td id="r11"></td>
+		</tr>
+		<tr>
+			<td>12</td>
+			<td id="s12"></td>
+			<td id="r12"></td>
+		</tr>
+		<tr>
+			<td>13</td>
+			<td id="s13"></td>
+			<td id="r13"></td>
+		</tr>
+		<tr>
+			<td>14</td>
+			<td id="s14"></td>
+			<td id="r14"></td>
+		</tr>
+		<tr>
+			<td>15</td>
+			<td id="s15"></td>
+			<td id="r15"></td>
+		</tr>
+	</table>
+	<h2>Pumps</h2>
+	<table>
+		<tr>
+			<th>Weight</th>
+			<th>Reps</th>
+			<th>Records</th>
+		</tr>
+		<tr>
+			<td>45</td>
+			<td id="p1"></td>
+			<td id="c1"></td>
+		</tr>
+		<tr>
+			<td>95</td>
+			<td id="p2"></td>
+			<td id="c2"></td>
+		</tr>
+		<tr>
+			<td>135</td>
+			<td id="p3"></td>
+			<td id="c3"></td>
+		</tr>
+		<tr>
+			<td>185</td>
+			<td id="p4"></td>
+			<td id="c4"></td>
+		</tr>
+		<tr>
+			<td>225</td>
+			<td id="p5"></td>
+			<td id="c5"></td>
+		</tr>
+		<tr>
+			<td>275</td>
+			<td id="p6"></td>
+			<td id="c6"></td>
+		</tr>
+		<tr>
+			<td>315</td>
+			<td id="p7"></td>
+			<td id="c7"></td>
+		</tr>
+		<tr>
+			<td>365</td>
+			<td id="p8"></td>
+			<td id="c8"></td>
+		</tr>
+		<tr>
+			<td>405</td>
+			<td id="p9"></td>
+			<td id="c9"></td>
+		</tr>
+		<tr>
+			<td>455</td>
+			<td id="p10"></td>
+			<td id="c10"></td>
+		</tr>
+		<tr>
+			<td>495</td>
+			<td id="p11"></td>
+			<td id="c11"></td>
+		</tr>
+	</table>
+
+<script>
+var xhistory = [];
+
+function Set(exercise, weight, reps) {
+this.exercise = exercise;
+this.weight = weight;
+this.reps = reps;
+this.toString = function () {
+	var output = exercise + " " + weight + " x " + reps + "<br>";
+	return output;
+}
+}
+
+function addSet() {
+	var e = document.getElementById("exercises");
+	var x = e.options[e.selectedIndex].text;
+	var y = document.getElementById("weight").value;
+	var z = document.getElementById("reps").value;
+	var a = parseInt(y);
+	var b = parseInt(z);
+	var g = a * b;
+	//Append Set and Post it for the user
+	if(a && b){
+		document.getElementById("response").innerHTML = x + " " + a + " x " +b;
+		document.getElementById("response2").innerHTML = "+ " + g + " Gains!";
+		var set = new Set(x, a, b);
+		xhistory.push(set);
+	} else {
+		document.getElementById("response").innerHTML = "Please enter a number for weight and reps!";
+	}
+
+	//Update Stats
+	//addStats(x, a, b);
+}
+
+var results = [];
+
+function clearResults(){
+	results = [];
+}
+
+function showSets() {
+	document.getElementById("history").innerHTML = results;
+}
+
+function showAll(item) {
+	results.push(item);
+}
+
+function showBenchSets(item) {
+	for (var k in item){
+		if (!item.hasOwnProperty(k)) continue;
+		if (item[k] === "Bench Press") {
+			results.push(item);
+		} else {
+		}
+	}
+}
+
+function showDeadSets(item) {
+	for (var k in item){
+		if (!item.hasOwnProperty(k)) continue;
+		if (item[k] === "Deadlift") {
+			results.push(item);
+		} else {
+		}
+	}
+}
+
+function showSquatSets(item) {
+	for (var k in item){
+		if (!item.hasOwnProperty(k)) continue;
+		if (item[k] === "Squat") {
+			results.push(item);
+		} else {
+		}
+	}
+}
+
+function hideSets() {
+	document.getElementById("history").innerHTML = " ";
+}
+
+totalGains = 0;
+totalWeight = 0;
+totalReps = 0;
+totalSets = 0;
+
+benchGains = 0;
+benchWeight = 0;
+benchReps = 0;
+benchSets = 0;
+
+squatGains = 0;
+squatWeight = 0;
+squatReps = 0;
+squatSets = 0;
+
+deadGains = 0;
+deadWeight = 0;
+deadReps = 0;
+deadSets = 0;
+
+function addStats() {
+	var e = document.getElementById("exercises");
+	var x = e.options[e.selectedIndex].text;
+	var y = document.getElementById("weight").value;
+	var z = document.getElementById("reps").value;
+	var a = parseInt(y);
+	var b = parseInt(z);
+	var g = a * b;
+
+	totalGains += g;
+	totalWeight += a;
+	totalReps += b;
+	totalSets++;
+
+	switch(x) {
+		case "Bench Press":
+			benchGains += g;
+			benchWeight += a;
+			benchReps += b;
+			benchSets++;
+		case "Squat":
+			squatGains += g;
+			squatWeight += a;
+			squatReps += b;
+			squatSets++;
+		case "Deadlift":
+			deadGains += g;
+			deadWeight += a;
+			deadReps += b;
+			deadSets++;
+	}
+
+	//document.getElementById("xlevel").innerHTML = x;
+	getLevel()
+	
+}
+
+function showTotal() {
+	document.getElementById("xgains").innerHTML = totalGains;
+	document.getElementById("xweight").innerHTML = totalWeight;
+	document.getElementById("xreps").innerHTML = totalReps;
+	document.getElementById("xsets").innerHTML = totalSets;
+}
+
+function showBench() {
+	document.getElementById("xgains").innerHTML = benchGains;
+	document.getElementById("xweight").innerHTML = benchWeight;
+	document.getElementById("xreps").innerHTML = benchReps;
+	document.getElementById("xsets").innerHTML = benchSets;
+}
+
+function showDead() {
+	document.getElementById("xgains").innerHTML = deadGains;
+	document.getElementById("xweight").innerHTML = deadWeight;
+	document.getElementById("xreps").innerHTML = deadReps;
+	document.getElementById("xsets").innerHTML = deadSets;
+}
+
+function showSquat() {
+	document.getElementById("xgains").innerHTML = squatGains;
+	document.getElementById("xweight").innerHTML = squatWeight;
+	document.getElementById("xreps").innerHTML = squatReps;
+	document.getElementById("xsets").innerHTML = squatSets;
+}
+
+levelGains = [0, 5000, 10000, 15000, 20000, 30000, 40000, 50000, 75000, 100000, 125000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000];
+
+level = 0;
+
+function getLevel(){
+	if (totalGains > levelGains[level]){
+		level++
+	}
+	document.getElementById("xlevel").innerHTML = level;
+}
+
+var stacksBench = {
+	weight: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+	records: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+}
+
+var pumpsBench = {
+	weight: [45,95,135,185,225,275,315,365,405,455,495],
+	reps: [0,0,0,0,0,0,0,0,0,0,0,],
+	records: [0,0,0,0,0,0,0,0,0,0,0,]
+}
+
+var stacksDead = {
+	weight: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+	records: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+}
+
+var pumpsDead = {
+	weight: [45,95,135,185,225,275,315,365,405,455,495],
+	reps: [0,0,0,0,0,0,0,0,0,0,0,],
+	records: [0,0,0,0,0,0,0,0,0,0,0,]
+}
+
+var stacksSquat = {
+	weight: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+	records: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+}
+
+var pumpsSquat = {
+	weight: [45,95,135,185,225,275,315,365,405,455,495],
+	reps: [0,0,0,0,0,0,0,0,0,0,0,],
+	records: [0,0,0,0,0,0,0,0,0,0,0,]
+}
+
+function addRecord() {
+	var e = document.getElementById("exercises");
+	var x = e.options[e.selectedIndex].text;
+	var y = document.getElementById("weight").value;
+	var z = document.getElementById("reps").value;
+	var a = parseInt(y);
+	var b = parseInt(z);
+	var p = b-1;
+	
+	switch(x) {
+		case "Bench Press":
+			if (stacksBench.weight[p] < a){
+				stacksBench.weight[p] = a;
+				stacksBench.records[p]++;
+				}
+	
+			for (var i in pumpsBench.weight) {
+				if (pumps.weight[i] == a){
+					var q = i;
+					if (pumpsBench.reps[q] < b){
+						pumpsBench.reps[q] = b;
+						pumpsBench.records[q]++;
+					}
+				}
+			}
+		case "Squat":
+			if (stacksSquat.weight[p] < a){
+				stacksSquat.weight[p] = a;
+				stacksSquat.records[p]++;
+				}
+	
+			for (var i in pumpsSquat.weight) {
+				if (pumpsSquat.weight[i] == a){
+					var q = i;
+					if (pumpsSquat.reps[q] < b){
+						pumpsSquat.reps[q] = b;
+						pumpsSquat.records[q]++;
+					}
+				}
+			}
+		case "Deadlift":
+			if (stacksDead.weight[p] < a){
+				stacksDead.weight[p] = a;
+				stacksDead.records[p]++;
+				}
+	
+			for (var i in pumpsDead.weight) {
+				if (pumpsDead.weight[i] == a){
+					var q = i;
+					if (pumpsDead.reps[q] < b){
+						pumpsDead.reps[q] = b;
+						pumpsDead.records[q]++;
+					}
+				}
+			}
+		}
+}
+
+function pickBench() {
+	var bro = stacksBench;
+	var dude = pumpsBench;
+	refreshRecords(bro, dude);
+}
+
+function pickSquat() {
+	var bro = stacksSquat;
+	var dude = pumpsSquat;
+	refreshRecords(bro, dude);
+}
+
+function pickDead() {
+	var bro = stacksDead;
+	var dude = pumpsDead;
+	refreshRecords(bro, dude);
+}
+
+function refreshRecords(bro, dude) {
+
+	var bro = bro;
+	var dude = dude;
+
+	document.getElementById("s1").innerHTML = bro.weight[0];
+	document.getElementById("s2").innerHTML = bro.weight[1];
+	document.getElementById("s3").innerHTML = bro.weight[2];
+	document.getElementById("s4").innerHTML = bro.weight[3];
+	document.getElementById("s5").innerHTML = bro.weight[4];
+	document.getElementById("s6").innerHTML = bro.weight[5];
+	document.getElementById("s7").innerHTML = bro.weight[6];
+	document.getElementById("s8").innerHTML = bro.weight[7];
+	document.getElementById("s9").innerHTML = bro.weight[8];
+	document.getElementById("s10").innerHTML = bro.weight[9];
+	document.getElementById("s11").innerHTML = bro.weight[10];
+	document.getElementById("s12").innerHTML = bro.weight[11];
+	document.getElementById("s13").innerHTML = bro.weight[12];
+	document.getElementById("s14").innerHTML = bro.weight[13];
+	document.getElementById("s15").innerHTML = bro.weight[14];
+
+	document.getElementById("r1").innerHTML = bro.records[0];
+	document.getElementById("r2").innerHTML = bro.records[1];
+	document.getElementById("r3").innerHTML = bro.records[2];
+	document.getElementById("r4").innerHTML = bro.records[3];
+	document.getElementById("r5").innerHTML = bro.records[4];
+	document.getElementById("r6").innerHTML = bro.records[5];
+	document.getElementById("r7").innerHTML = bro.records[6];
+	document.getElementById("r8").innerHTML = bro.records[7];
+	document.getElementById("r9").innerHTML = bro.records[8];
+	document.getElementById("r10").innerHTML = bro.records[9];
+	document.getElementById("r11").innerHTML = bro.records[10];
+	document.getElementById("r12").innerHTML = bro.records[11];
+	document.getElementById("r13").innerHTML = bro.records[12];
+	document.getElementById("r14").innerHTML = bro.records[13];
+	document.getElementById("r15").innerHTML = bro.records[14];
+
+	document.getElementById("p1").innerHTML = dude.reps[0];
+	document.getElementById("p2").innerHTML = dude.reps[1];
+	document.getElementById("p3").innerHTML = dude.reps[2];
+	document.getElementById("p4").innerHTML = dude.reps[3];
+	document.getElementById("p5").innerHTML = dude.reps[4];
+	document.getElementById("p6").innerHTML = dude.reps[5];
+	document.getElementById("p7").innerHTML = dude.reps[6];
+	document.getElementById("p8").innerHTML = dude.reps[7];
+	document.getElementById("p9").innerHTML = dude.reps[8];
+	document.getElementById("p10").innerHTML = dude.reps[9];
+	document.getElementById("p11").innerHTML = dude.reps[10];
+	
+	document.getElementById("c1").innerHTML = dude.records[0];
+	document.getElementById("c2").innerHTML = dude.records[1];
+	document.getElementById("c3").innerHTML = dude.records[2];
+	document.getElementById("c4").innerHTML = dude.records[3];
+	document.getElementById("c5").innerHTML = dude.records[4];
+	document.getElementById("c6").innerHTML = dude.records[5];
+	document.getElementById("c7").innerHTML = dude.records[6];
+	document.getElementById("c8").innerHTML = dude.records[7];
+	document.getElementById("c9").innerHTML = dude.records[8];
+	document.getElementById("c10").innerHTML = dude.records[9];
+	document.getElementById("c11").innerHTML = dude.records[10];
+	
+}
+
+</script>
+
+</body>
+</html>
