@@ -1,12 +1,14 @@
 <html>
 	<head>
-		<title>TH3 BIG THR33</title>
+		<title>BIG3</title>
+		<script src='https://code.jquery.com/jquery-3.1.0.min.js'></script>
 	</head>
 <body>
 
-	<h1>TH3 BIG THR33</h1>
+	<h1 id="title">BIG3</h1>
 	<h2>Level: </h2><h2 id="xlevel"></h2>
 	<hr>
+
 
 	<h1>Enter Set:</h1>
 	Exercise:<select id="exercises">
@@ -16,10 +18,11 @@
 	</select><br>
 	Weight: <input id="weight" type="text" value="100"><br>
 	Reps: <input id="reps" type="text" value="10"><br>
-	<button onclick="addSet();addStats();addRecord();">Add</button>
+	<button onclick="addSet();addStats();addRecord();addGains();addChallenges();">Add</button>
 	<p id="response"></p>
 	<p id="response2"></p>
 	<p id="response3"></p>
+	<p id="response4"></p>
 	<hr>
 
 	<h1>History:</h1>
@@ -31,7 +34,7 @@
 	<p id="history"></p>
 	<hr>
 
-	<h1>Stats</h1>
+	<h1>Stats:</h1>
 	<button onclick="showTotal();">Total</button>
 	<button onclick="showBench();">Bench</button>
 	<button onclick="showDead();">Deadlift</button>
@@ -40,12 +43,13 @@
 	Weight: <p id="xweight"></p>
 	Reps: <p id="xreps"></p>
 	Sets: <p id="xsets"></p>
+	Records: <p id="xrecords"></p>
 	<hr>
 
-	<h1>Records</h1>
+	<h1>Records:</h1>
 	<button onclick="pickBench();">Bench</button>
-	<button onclick="pickSquat();">Deadlift</button>
-	<button onclick="pickDead();">Squat</button>
+	<button onclick="pickDead();">Deadlift</button>
+	<button onclick="pickSquat();">Squat</button>
 	<p>(Click to Refresh)<p>
 	<h2>Stacks</h2>
 	<table>
@@ -193,21 +197,76 @@
 			<td id="c11"></td>
 		</tr>
 	</table>
+	<hr>
+
+	<h1>Challenges:</h1>
+	<button onclick="chalBench();">Bench</button>
+	<button onclick="chalDead();">Deadlift</button>
+	<button onclick="chalSquat();">Squat</button>
+	<table>
+		<tr>
+			<th>Challenge</th>
+			<th>Status</th>
+		</tr>
+		<tr>
+			<td>2 sets of 20 reps</td>
+			<td id="x1"></td>
+		</tr>
+		<tr>
+			<td>2 sets of 18 reps</td>
+			<td id="x2"></td>
+		</tr>
+		<tr>
+			<td>3 sets of 15 reps</td>
+			<td id="x3"></td>
+		</tr>
+		<tr>
+			<td>3 sets of 12 reps</td>
+			<td id="x4"></td>
+		</tr>
+		<tr>
+			<td>4 sets of 10 reps</td>
+			<td id="x5"></td>
+		</tr>
+		<tr>
+			<td>4 sets of 8 reps</td>
+			<td id="x6"></td>
+		</tr>
+		<tr>
+			<td>5 sets of 5 reps</td>
+			<td id="x7"></td>
+		</tr>
+		<tr>
+			<td>5 sets of 3 reps</td>
+			<td id="x8"></td>
+		</tr>
+		<tr>
+			<td>6, 8, then 10 reps</td>
+			<td id="x9"></td>
+		</tr>
+		<tr>
+			<td>10, 8, then 6 reps</td>
+			<td id="x10"></td>
+		</tr>
 
 <script>
 var xhistory = [];
 
-function Set(exercise, weight, reps) {
+function Set(date ,exercise, weight, reps) {
+this.date = date;
 this.exercise = exercise;
 this.weight = weight;
 this.reps = reps;
 this.toString = function () {
-	var output = exercise + " " + weight + " x " + reps + "<br>";
+	var output = date + " " + exercise + " " + weight + " x " + reps + "<br>";
 	return output;
-}
+	}
 }
 
 function addSet() {
+	var d = new Date();
+	var m = new Date();
+	var date = m.getMonth() + "-" + d.getDate();
 	var e = document.getElementById("exercises");
 	var x = e.options[e.selectedIndex].text;
 	var y = document.getElementById("weight").value;
@@ -218,8 +277,8 @@ function addSet() {
 	//Append Set and Post it for the user
 	if(a && b){
 		document.getElementById("response").innerHTML = x + " " + a + " x " +b;
-		document.getElementById("response2").innerHTML = "+ " + g + " Gains!";
-		var set = new Set(x, a, b);
+		thisSetGains = thisSetGains + g;
+		var set = new Set(date, x, a, b);
 		xhistory.push(set);
 	} else {
 		document.getElementById("response").innerHTML = "Please enter a number for weight and reps!";
@@ -236,7 +295,7 @@ function clearResults(){
 }
 
 function showSets() {
-	document.getElementById("history").innerHTML = results;
+	document.getElementById("history").innerHTML = results.join(' ');
 }
 
 function showAll(item) {
@@ -297,6 +356,24 @@ deadWeight = 0;
 deadReps = 0;
 deadSets = 0;
 
+thisSetGains = 0;
+
+benchArrayReps = [];
+squatArrayReps = [];
+deadArrayReps = [];
+
+challengeOne = [false, false, false];
+challengeTwo = [false, false, false];
+challengeThree = [false, false, false];
+challengeFour = [false, false, false];
+challengeFive = [false, false, false];
+challengeSix = [false, false, false];
+challengeSeven = [false, false, false];
+challengeEight = [false, false, false];
+challengeNine = [false, false, false];
+challengeTen = [false, false, false];
+
+
 function addStats() {
 	var e = document.getElementById("exercises");
 	var x = e.options[e.selectedIndex].text;
@@ -311,22 +388,24 @@ function addStats() {
 	totalReps += b;
 	totalSets++;
 
-	switch(x) {
-		case "Bench Press":
-			benchGains += g;
-			benchWeight += a;
-			benchReps += b;
-			benchSets++;
-		case "Squat":
-			squatGains += g;
-			squatWeight += a;
-			squatReps += b;
-			squatSets++;
-		case "Deadlift":
-			deadGains += g;
-			deadWeight += a;
-			deadReps += b;
-			deadSets++;
+	if (x == "Bench Press"){
+		benchGains += g;
+		benchWeight += a;
+		benchReps += b;
+		benchSets++;
+		benchArrayReps.push(b);
+	} else if (x =="Squat"){
+		squatGains += g;
+		squatWeight += a;
+		squatReps += b;
+		squatSets++;
+		squatArrayReps.push(b);
+	} else if (x == "Deadlift"){
+		deadGains += g;
+		deadWeight += a;
+		deadReps += b;
+		deadSets++;
+		deadArrayReps.push(b);
 	}
 
 	//document.getElementById("xlevel").innerHTML = x;
@@ -334,11 +413,22 @@ function addStats() {
 	
 }
 
+function addGains() {
+	document.getElementById("response2").innerHTML = "+ " + thisSetGains + " Gains!";
+	totalGains = totalGains + thisSetGains;
+	thisSetGains = 0;
+}
+
 function showTotal() {
 	document.getElementById("xgains").innerHTML = totalGains;
 	document.getElementById("xweight").innerHTML = totalWeight;
 	document.getElementById("xreps").innerHTML = totalReps;
 	document.getElementById("xsets").innerHTML = totalSets;
+
+	function getRecord(item){
+		document.getElementById("xrecords").innerHTML = stacksBench.records.reduce(getSum) + pumpsBench.records.reduce(getSum) + stacksDead.records.reduce(getSum) + pumpsDead.records.reduce(getSum) + stacksSquat.records.reduce(getSum) + pumpsSquat.records.reduce(getSum);
+	}
+	getRecord()
 }
 
 function showBench() {
@@ -346,6 +436,12 @@ function showBench() {
 	document.getElementById("xweight").innerHTML = benchWeight;
 	document.getElementById("xreps").innerHTML = benchReps;
 	document.getElementById("xsets").innerHTML = benchSets;
+	
+	function getRecord(item){
+		document.getElementById("xrecords").innerHTML = stacksBench.records.reduce(getSum) + pumpsBench.records.reduce(getSum);
+	}
+	getRecord()
+
 }
 
 function showDead() {
@@ -353,6 +449,11 @@ function showDead() {
 	document.getElementById("xweight").innerHTML = deadWeight;
 	document.getElementById("xreps").innerHTML = deadReps;
 	document.getElementById("xsets").innerHTML = deadSets;
+
+	function getRecord(item){
+		document.getElementById("xrecords").innerHTML = stacksDead.records.reduce(getSum) + pumpsDead.records.reduce(getSum);
+	}
+	getRecord()
 }
 
 function showSquat() {
@@ -360,9 +461,18 @@ function showSquat() {
 	document.getElementById("xweight").innerHTML = squatWeight;
 	document.getElementById("xreps").innerHTML = squatReps;
 	document.getElementById("xsets").innerHTML = squatSets;
+
+	function getRecord(item){
+		document.getElementById("xrecords").innerHTML = stacksSquat.records.reduce(getSum) + pumpsSquat.records.reduce(getSum);
+	}
+	getRecord()
 }
 
-levelGains = [0, 5000, 10000, 15000, 20000, 30000, 40000, 50000, 75000, 100000, 125000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000];
+function getSum(total, num) {
+    return total + num;
+}
+
+levelGains = [0, 10000, 30000, 50000, 75000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 500000, 600000, 700000, 800000, 1000000, 1500000, 2000000, 3000000];
 
 level = 0;
 
@@ -414,54 +524,67 @@ function addRecord() {
 	var a = parseInt(y);
 	var b = parseInt(z);
 	var p = b-1;
-	
-	switch(x) {
-		case "Bench Press":
-			if (stacksBench.weight[p] < a){
-				stacksBench.weight[p] = a;
-				stacksBench.records[p]++;
-				}
-	
-			for (var i in pumpsBench.weight) {
-				if (pumps.weight[i] == a){
-					var q = i;
-					if (pumpsBench.reps[q] < b){
-						pumpsBench.reps[q] = b;
-						pumpsBench.records[q]++;
-					}
-				}
-			}
-		case "Squat":
-			if (stacksSquat.weight[p] < a){
-				stacksSquat.weight[p] = a;
-				stacksSquat.records[p]++;
-				}
-	
-			for (var i in pumpsSquat.weight) {
-				if (pumpsSquat.weight[i] == a){
-					var q = i;
-					if (pumpsSquat.reps[q] < b){
-						pumpsSquat.reps[q] = b;
-						pumpsSquat.records[q]++;
-					}
-				}
-			}
-		case "Deadlift":
-			if (stacksDead.weight[p] < a){
-				stacksDead.weight[p] = a;
-				stacksDead.records[p]++;
-				}
-	
-			for (var i in pumpsDead.weight) {
-				if (pumpsDead.weight[i] == a){
-					var q = i;
-					if (pumpsDead.reps[q] < b){
-						pumpsDead.reps[q] = b;
-						pumpsDead.records[q]++;
-					}
+	document.getElementById("response3").innerHTML = " ";
+
+	if (x == "Bench Press") {
+		if (stacksBench.weight[p] < a){
+			stacksBench.weight[p] = a;
+			stacksBench.records[p]++;
+			thisSetGains = thisSetGains + 5000;
+			document.getElementById("response3").innerHTML = "New Record!";
+		}
+		for (var i in pumpsBench.weight) {
+			if (pumpsBench.weight[i] == a){
+				var q = i;
+				if (pumpsBench.reps[q] < b){
+					pumpsBench.reps[q] = b;
+					pumpsBench.records[q]++;
+					thisSetGains = thisSetGains + 5000;
+					document.getElementById("response3").innerHTML = "New Record!";
 				}
 			}
 		}
+	}
+	if (x == "Squat"){
+		if (stacksSquat.weight[p] < a){
+			stacksSquat.weight[p] = a;
+			stacksSquat.records[p]++;
+			thisSetGains = thisSetGains + 5000;
+			document.getElementById("response3").innerHTML = "New Record!";
+			}
+	
+		for (var i in pumpsSquat.weight) {
+			if (pumpsSquat.weight[i] == a){
+				var q = i;
+				if (pumpsSquat.reps[q] < b){
+					pumpsSquat.reps[q] = b;
+					pumpsSquat.records[q]++;
+					thisSetGains = thisSetGains + 5000;
+					document.getElementById("response3").innerHTML = "New Record!";
+				}
+			}
+		}
+	}
+	if (x == "Deadlift"){
+		if (stacksDead.weight[p] < a){
+			stacksDead.weight[p] = a;
+			stacksDead.records[p]++;
+			thisSetGains = thisSetGains + 5000;
+			document.getElementById("response3").innerHTML = "New Record!";
+			}
+	
+		for (var i in pumpsDead.weight) {
+			if (pumpsDead.weight[i] == a){
+				var q = i;
+				if (pumpsDead.reps[q] < b){
+					pumpsDead.reps[q] = b;
+					pumpsDead.records[q]++;
+					thisSetGains = thisSetGains + 5000;
+					document.getElementById("response3").innerHTML = "New Record!";
+				}
+			}
+		}
+	}
 }
 
 function pickBench() {
@@ -542,6 +665,209 @@ function refreshRecords(bro, dude) {
 	document.getElementById("c9").innerHTML = dude.records[8];
 	document.getElementById("c10").innerHTML = dude.records[9];
 	document.getElementById("c11").innerHTML = dude.records[10];
+	
+}
+
+function addChallenges() {
+	var num = 0;
+	var e = document.getElementById("exercises");
+	var x = e.options[e.selectedIndex].text;
+	var one = [20,20];
+	var two = [18, 18];
+	var three = [15, 15, 15];
+	var four = [12, 12, 12];
+	var five = [10, 10, 10, 10];
+	var six = [8, 8, 8, 8];
+	var seven = [5, 5, 5, 5, 5];
+	var eight = [3, 3, 3, 3, 3];
+	var nine = [6, 8, 10];
+	var ten = [10, 8, 6];
+	
+	if (x == "Bench Press"){
+		num = 0;	
+	}else if (x == "Squat"){
+		num = 1;
+	}else if (x == "Deadlift"){
+		num = 2;
+	}
+	document.getElementById("response4").innerHTML = " ";
+
+	if (!challengeOne[num]){
+		if(challengeCompleted(one)){
+			challengeOne[num] = true;
+			thisSetGains = thisSetGains + 5000;
+			document.getElementById("response4").innerHTML = "Challenge Completed!";	
+		}
+	}
+	if (!challengeTwo[num]){
+		if(challengeCompleted(two)){
+			challengeTwo[num] = true;
+			thisSetGains = thisSetGains + 5000;
+			document.getElementById("response4").innerHTML = "Challenge Completed!";	
+		}
+	}
+	if (!challengeThree[num]){
+		if(challengeCompleted(three)){
+			challengeThree[num] = true;
+			thisSetGains = thisSetGains + 5000;
+			document.getElementById("response4").innerHTML = "Challenge Completed!";	
+		}
+	}
+	if (!challengeFour[num]){
+		if(challengeCompleted(four)){
+			challengeFour[num] = true;
+			thisSetGains = thisSetGains + 5000;
+			document.getElementById("response4").innerHTML = "Challenge Completed!";
+		}
+	}
+	if (!challengeFive[num]){
+		if(challengeCompleted(five)){
+			challengeFive[num] = true;
+			thisSetGains = thisSetGains + 5000;	
+			document.getElementById("response4").innerHTML = "Challenge Completed!";
+		}
+	}
+	if (!challengeSix[num]){
+		if(challengeCompleted(six)){
+			challengeSix[num] = true;
+			thisSetGains = thisSetGains + 5000;
+			document.getElementById("response4").innerHTML = "Challenge Completed!";
+		}
+	}
+	if (!challengeSeven[num]){
+		if(challengeCompleted(seven)){
+			challengeSeven[num] = true;
+			thisSetGains = thisSetGains + 5000;
+			document.getElementById("response4").innerHTML = "Challenge Completed!";
+		}
+	}
+	if (!challengeEight[num]){
+		if(challengeCompleted(eight)){
+			challengeEight[num] = true;
+			thisSetGains = thisSetGains + 5000;
+			document.getElementById("response4").innerHTML = "Challenge Completed!";
+		}
+	}
+	if (!challengeNine[num]){
+		if(challengeCompleted(nine)){
+			challengeNine[num] = true;
+			thisSetGains = thisSetGains + 5000;
+			document.getElementById("response4").innerHTML = "Challenge Completed!";
+		}
+	}
+	if (!challengeTen[num]){
+		if(challengeCompleted(ten)){
+			challengeTen[num] = true;
+			thisSetGains = thisSetGains + 5000;
+			document.getElementById("response4").innerHTML = "Challenge Completed!";
+		}
+	}
+}
+
+function challengeCompleted(x){
+	var x = x;
+	var y = x.length;
+	var e = document.getElementById("exercises");
+	var t = e.options[e.selectedIndex].text;
+	
+	if (t == "Bench Press"){
+		
+		var arr = benchArrayReps.slice(-y);
+		if (arr.length !== x.length) return false;
+		for (var i in arr){
+			if (arr[i] !== x[i]){
+				return false;
+			}
+		}
+		return true;
+	}else if (t == "Squat"){
+		var arr = squatArrayReps.slice(-y);
+		if (arr.length !== x.length) return false;
+		for (var i in arr){
+			if (arr[i] !== x[i]){
+				return false;
+			}
+		}
+		return true;
+	}else if (t == "Deadlift"){
+		var arr = deadArrayReps.slice(-y);
+		if (arr.length !== x.length) return false;
+		for (var i in arr){
+			if (arr[i] !== x[i]){
+				return false;
+			}
+		}
+		return true;
+	}
+}
+
+function chalBench() {
+	var num = 0;
+	refreshChallenges(num);
+}
+
+function chalSquat() {
+	var num = 1;
+	refreshChallenges(num);
+}
+
+function chalDead() {
+	var num = 2
+	refreshChallenges(num);
+}
+
+function refreshChallenges(num) {
+	var num = num;
+	if(challengeOne[num]){
+		document.getElementById("x1").innerHTML = "Complete";
+	} else{
+		document.getElementById("x1").innerHTML = "Incomplete";
+	}
+	if(challengeTwo[num]){
+		document.getElementById("x2").innerHTML = "Complete";
+	} else{
+		document.getElementById("x2").innerHTML = "Incomplete";
+	}
+	if(challengeThree[num]){
+		document.getElementById("x3").innerHTML = "Complete";
+	} else{
+		document.getElementById("x3").innerHTML = "Incomplete";
+	}
+	if(challengeFour[num]){
+		document.getElementById("x4").innerHTML = "Complete";
+	} else{
+		document.getElementById("x4").innerHTML = "Incomplete";
+	}
+	if(challengeFive[num]){
+		document.getElementById("x5").innerHTML = "Complete";
+	} else{
+		document.getElementById("x5").innerHTML = "Incomplete";
+	}
+	if(challengeSix[num]){
+		document.getElementById("x6").innerHTML = "Complete";
+	} else{
+		document.getElementById("x6").innerHTML = "Incomplete";
+	}
+	if(challengeSeven[num]){
+		document.getElementById("x7").innerHTML = "Complete";
+	} else{
+		document.getElementById("x7").innerHTML = "Incomplete";
+	}
+	if(challengeEight[num]){
+		document.getElementById("x8").innerHTML = "Complete";
+	} else{
+		document.getElementById("x8").innerHTML = "Incomplete";
+	}
+	if(challengeNine[num]){
+		document.getElementById("x9").innerHTML = "Complete";
+	} else{
+		document.getElementById("x9").innerHTML = "Incomplete";
+	}
+	if(challengeTen[num]){
+		document.getElementById("x10").innerHTML = "Complete";
+	} else{
+		document.getElementById("x10").innerHTML = "Incomplete";
+	}
 	
 }
 
